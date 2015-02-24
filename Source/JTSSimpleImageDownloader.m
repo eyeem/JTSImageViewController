@@ -8,8 +8,6 @@
 
 #import "JTSSimpleImageDownloader.h"
 
-#import "JTSAnimatedGIFUtility.h"
-
 @implementation JTSSimpleImageDownloader
 
 + (NSURLSessionDataTask *)downloadImageForURL:(NSURL *)imageURL canonicalURL:(NSURL *)canonicalURL completion:(void (^)(UIImage *))completion {
@@ -58,10 +56,6 @@
     UIImage *image = nil;
     
     if (data) {
-        NSString *referenceURL = (canonicalURL.absoluteString.length) ? canonicalURL.absoluteString : imageURL.absoluteString;
-        if ([JTSAnimatedGIFUtility imageURLIsAGIF:referenceURL]) {
-            image = [JTSAnimatedGIFUtility animatedImageWithAnimatedGIFData:data];
-        }
         if (image == nil) {
             image = [[UIImage alloc] initWithData:data];
         }

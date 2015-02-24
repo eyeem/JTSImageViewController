@@ -15,26 +15,7 @@
 ///-------------------------------------------------------------------------------
 
 @protocol JTSImageViewControllerDismissalDelegate;
-@protocol JTSImageViewControllerOptionsDelegate;
 @protocol JTSImageViewControllerInteractionsDelegate;
-
-typedef NS_ENUM(NSInteger, JTSImageViewControllerMode) {
-    JTSImageViewControllerMode_Image,
-    JTSImageViewControllerMode_AltText,
-};
-
-typedef NS_ENUM(NSInteger, JTSImageViewControllerTransition) {
-    JTSImageViewControllerTransition_FromOriginalPosition,
-    JTSImageViewControllerTransition_FromOffscreen,
-};
-
-typedef NS_ENUM(NSInteger, JTSImageViewControllerBackgroundStyle) {
-    JTSImageViewControllerBackgroundStyle_ScaledDimmed,
-    JTSImageViewControllerBackgroundStyle_ScaledDimmedBlurred,
-};
-
-extern CGFloat const JTSImageViewController_DefaultAlphaForBackgroundDimmingOverlay;
-extern CGFloat const JTSImageViewController_DefaultBackgroundBlurRadius;
 
 ///-------------------------------------------------------------------------------
 /// JTSImageViewController
@@ -43,38 +24,11 @@ extern CGFloat const JTSImageViewController_DefaultBackgroundBlurRadius;
 @interface JTSImageViewController : UIViewController
 
 @property (strong, nonatomic, readonly) JTSImageInfo *imageInfo;
-
 @property (strong, nonatomic, readonly) UIImage *image;
 
-@property (copy, nonatomic, readwrite) NSString *accessibilityLabel;
-
-@property (copy, nonatomic, readwrite) NSString *accessibilityHintZoomedIn;
-
-@property (copy, nonatomic, readwrite) NSString *accessibilityHintZoomedOut;
-
 @property (weak, nonatomic, readwrite) id <JTSImageViewControllerDismissalDelegate> dismissalDelegate;
-
-@property (weak, nonatomic, readwrite) id <JTSImageViewControllerOptionsDelegate> optionsDelegate;
-
 @property (weak, nonatomic, readwrite) id <JTSImageViewControllerInteractionsDelegate> interactionsDelegate;
 
-/**
- Changes to this property must be made before showFromViewController:transition: is called, 
- or else they will have no effect.
- 
- Defaults to `JTSImageViewController_DefaultAlphaForBackgroundDimmingOverlay`.
- */
-@property (assign, nonatomic, readwrite) CGFloat alphaForBackgroundDimmingOverlay;
-
-/**
- Used with a JTSImageViewControllerBackgroundStyle_ScaledDimmedBlurred background style.
- 
- Changes to this property must be made before showFromViewController:transition: is called,
- or else they will have no effect.
- 
- Defaults to `JTSImageViewController_DefaultBackgroundBlurRadius`.
- */
-@property (assign, nonatomic, readwrite) CGFloat backgroundBlurRadius;
 
 /**
  Designated initializer.
@@ -85,9 +39,10 @@ extern CGFloat const JTSImageViewController_DefaultBackgroundBlurRadius;
  
  @param backgroundStyle Currently, either scaled-and-dimmed, or scaled-dimmed-and-blurred. The latter is like Tweetbot 3.0's background style.
  */
-- (instancetype)initWithImageInfo:(JTSImageInfo *)imageInfo
-                             mode:(JTSImageViewControllerMode)mode
-                  backgroundStyle:(JTSImageViewControllerBackgroundStyle)backgroundStyle;
+
+- (instancetype)initWithImageInfo:(JTSImageInfo *)imageInfo;
+
+- (instancetype)initWithImageInfo:(JTSImageInfo *)imageInfo initialTapPoint:(CGPoint)initialTapPoint;
 
 /**
  JTSImageViewController is presented from viewController as a UIKit modal view controller.
@@ -97,8 +52,7 @@ extern CGFloat const JTSImageViewController_DefaultBackgroundBlurRadius;
  
  Next, there is an animated transition to a full-screen image viewer.
  */
-- (void)showFromViewController:(UIViewController *)viewController
-                    transition:(JTSImageViewControllerTransition)transition;
+- (void)showFromViewController:(UIViewController *)viewController;
 
 /**
  Dismisses the image viewer. Must not be called while previous presentation or dismissal is still in flight.
@@ -117,20 +71,6 @@ extern CGFloat const JTSImageViewController_DefaultBackgroundBlurRadius;
 
 @end
 
-///-------------------------------------------------------------------------------
-/// Options Delegate
-///-------------------------------------------------------------------------------
-
-@protocol JTSImageViewControllerOptionsDelegate <NSObject>
-@optional
-
-- (BOOL)imageViewerShouldDimThumbnails:(JTSImageViewController *)imageViewer;
-
-- (UIFont *)fontForAltTextInImageViewer:(JTSImageViewController *)imageViewer;
-
-- (UIColor *)accentColorForAltTextInImageViewer:(JTSImageViewController *)imageView;
-
-@end
 
 ///-------------------------------------------------------------------------------
 /// Interactions Delegate
@@ -138,8 +78,6 @@ extern CGFloat const JTSImageViewController_DefaultBackgroundBlurRadius;
 
 @protocol JTSImageViewControllerInteractionsDelegate <NSObject>
 @optional
-
-- (void)imageViewerDidLongPress:(JTSImageViewController *)imageViewer;
 
 - (BOOL)imageViewerShouldTemporarilyIgnoreTouches:(JTSImageViewController *)imageViewer;
 
