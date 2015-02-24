@@ -95,7 +95,7 @@
 
 #import "UIImage+JTSImageEffects.h"
 
-@import Accelerate;
+#import <Accelerate/Accelerate.h>
 #import <float.h>
 
 

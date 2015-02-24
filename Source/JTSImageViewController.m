@@ -347,7 +347,7 @@ CGFloat const JTSImageViewController_MinimumFlickDismissalVelocity = 800.0f;
     [self.progressContainer addSubview:self.spinner];
     [self.progressContainer setAlpha:0];
     
-    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.scrollView];
+//    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.scrollView];
     
     if (self.image) {
         [self updateInterfaceWithImage:self.image];
@@ -364,9 +364,7 @@ CGFloat const JTSImageViewController_MinimumFlickDismissalVelocity = 800.0f;
     [self.blackBackdrop setAlpha:0];
     [self.view addSubview:self.blackBackdrop];
     
-    CGFloat outerMargin = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) ? 80.0 : 40.0;
-    
-    self.textView = [[UITextView alloc] initWithFrame:CGRectInset(self.view.bounds, outerMargin, 0)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectInset(self.view.bounds, 14.0f, 0)];
     self.textView.delegate = self;
     self.textView.textColor = [UIColor whiteColor];
     self.textView.backgroundColor = [UIColor clearColor];
@@ -446,16 +444,16 @@ CGFloat const JTSImageViewController_MinimumFlickDismissalVelocity = 800.0f;
     
     [self setIsAnimatingAPresentationOrDismissal:YES];
     [self.view setUserInteractionEnabled:NO];
+//    
+//    self.snapshotView = [self snapshotFromParentmostViewController:viewController];
+//    
+//    if (self.backgroundStyle == JTSImageViewControllerBackgroundStyle_ScaledDimmedBlurred) {
+//        self.blurredSnapshotView = [self blurredSnapshotFromParentmostViewController:viewController];
+//        [self.snapshotView addSubview:self.blurredSnapshotView];
+//        [self.blurredSnapshotView setAlpha:0];
+//    }
     
-    self.snapshotView = [self snapshotFromParentmostViewController:viewController];
-    
-    if (self.backgroundStyle == JTSImageViewControllerBackgroundStyle_ScaledDimmedBlurred) {
-        self.blurredSnapshotView = [self blurredSnapshotFromParentmostViewController:viewController];
-        [self.snapshotView addSubview:self.blurredSnapshotView];
-        [self.blurredSnapshotView setAlpha:0];
-    }
-    
-    [self.view insertSubview:self.snapshotView atIndex:0];
+//    [self.view insertSubview:self.snapshotView atIndex:0];
     [self setStartingInterfaceOrientation:viewController.interfaceOrientation];
     [self setLastUsedOrientation:viewController.interfaceOrientation];
     CGRect referenceFrameInWindow = [self.imageInfo.referenceView convertRect:self.imageInfo.referenceRect toView:nil];
@@ -772,7 +770,7 @@ CGFloat const JTSImageViewController_MinimumFlickDismissalVelocity = 800.0f;
     
     if ([self.optionsDelegate imageViewerShouldDimThumbnails:self]) {
         [UIView animateWithDuration:0.15 delay:0.18 options:0 animations:^{
-            [self.imageView setAlpha:0];
+            [self.scrollView setAlpha:0];
         } completion:nil];
     }
     
